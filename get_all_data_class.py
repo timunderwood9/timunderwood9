@@ -9,7 +9,8 @@ from datetime import datetime
 import re
 import string
 
-#we need self to intialize, and soup is the input for a given instance
+#we need self to intialize, and soup is the input for a given instance, kind of an ugly solution
+#to allowing hte testing, with the url that in the case of a test is left blank
 class BookData:
     def __init__ (self, url, soup):
         self.url = url
@@ -17,13 +18,16 @@ class BookData:
         self.details_list = self.get_details_list()
         self.KU = self.check_KU()
 
+    #allows the standard input to be BookData.from_url(url)
     @staticmethod
     def from_url (url):
         soup = BookData.load_website(url)
         return BookData (url, soup)
 
         
-
+    #When issues occurred in running the code it was never with the actual load website command, but that part of the website was missing
+    #This is resolved by the delays (that were formatted in a sort of ugly way) in the get_detail_list function, which is the first place where 
+    #an actual check of the htlm is made
     def load_website(url, retries = 2, delay=5):
         ua = UserAgent()
         for i in range(retries + 1):
